@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Cab Booking Dashboard</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f5f6fa;
+margin:0;
+}
+
+header{
+background:#2c3e50;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+width:95%;
+max-width:1100px;
+margin:auto;
+margin-top:20px;
+display:grid;
+grid-template-columns:350px 1fr;
+gap:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+h2{
+margin-top:0;
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin-top:8px;
+margin-bottom:10px;
+border-radius:6px;
+border:1px solid #ccc;
+font-size:15px;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#27ae60;
+color:white;
+border:none;
+border-radius:6px;
+font-size:16px;
+cursor:pointer;
+}
+
+button:hover{
+background:#219150;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+padding:10px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
+
+th{
+background:#34495e;
+color:white;
+}
+
+.price{
+color:#e74c3c;
+font-weight:bold;
+}
+
+.status{
+color:#27ae60;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>🚖 Cab Booking Rider Dashboard</header>
+
+<div class="container">
+
+<!-- Booking Panel -->
+
+<div class="card">
+
+<h2>Book a Ride</h2>
+
+<label>Pickup Location</label>
+<input id="pickup" placeholder="Enter pickup location">
+
+<label>Drop Location</label>
+<input id="drop" placeholder="Enter destination">
+
+<label>Cab Type</label>
+<select id="cab">
+<option value="mini">Mini</option>
+<option value="sedan">Sedan</option>
+<option value="suv">SUV</option>
+</select>
+
+<label>Payment Method</label>
+<select id="payment">
+<option>Cash</option>
+<option>UPI</option>
+<option>Card</option>
+</select>
+
+<button onclick="bookRide()">Book Ride</button>
+
+</div>
+
+
+<!-- Ride History -->
+
+<div class="card">
+
+<h2>Ride History</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>ID</th>
+<th>Pickup</th>
+<th>Drop</th>
+<th>Cab</th>
+<th>Driver</th>
+<th>Fare</th>
+<th>Payment</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody id="rideTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<script>
+
+let drivers=[
+"Rahul Sharma",
+"Amit Verma",
+"Rohit Singh",
+"Vikas Kumar",
+"Arjun Mehta"
+];
+
+let rideList=[];
+
+function generateFare(cab){
+
+if(cab=="mini") return Math.floor(Math.random()*60)+80;
+if(cab=="sedan") return Math.floor(Math.random()*100)+150;
+if(cab=="suv") return Math.floor(Math.random()*150)+250;
+
+}
+
+function bookRide(){
+
+let pickup=document.getElementById("pickup").value;
+let drop=document.getElementById("drop").value;
+let cab=document.getElementById("cab").value;
+let payment=document.getElementById("payment").value;
+
+if(pickup=="" || drop==""){
+alert("Please enter pickup and drop location");
+return;
+}
+
+let driver=drivers[Math.floor(Math.random()*drivers.length)];
+let fare=generateFare(cab);
+
+let ride={
+id:rideList.length+1,
+pickup,
+drop,
+cab,
+driver,
+fare,
+payment,
+status:"Completed"
+};
+
+rideList.push(ride);
+
+updateTable();
+
+alert("Ride booked successfully\nFare: ₹"+fare);
+
+document.getElementById("pickup").value="";
+document.getElementById("drop").value="";
+
+}
+
+function updateTable(){
+
+let rows="";
+
+rideList.forEach(r=>{
+
+rows+=`
+<tr>
+<td>${r.id}</td>
+<td>${r.pickup}</td>
+<td>${r.drop}</td>
+<td>${r.cab}</td>
+<td>${r.driver}</td>
+<td class="price">₹${r.fare}</td>
+<td>${r.payment}</td>
+<td class="status">${r.status}</td>
+</tr>
+`;
+
+});
+
+document.getElementById("rideTable").innerHTML=rows;
+
+}
+
+</script>
+
+</body>
+</html>
